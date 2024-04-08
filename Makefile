@@ -20,7 +20,7 @@ CC = $(MSPGCC_BIN_DIR)/msp430-elf-gcc
 RM = rm
 DEBUG = LD_LIBRARY_PATH=$(DEBUG_DRIVERS_DIR) $(DEBUG_BIN_DIR)/mspdebug
 CPPCHECK = cppcheck
-CLANG-FORMAT = clang-format-12
+FORMAT = clang-format-12
 
 # Files
 TARGET = $(BIN_DIR)/nsumo
@@ -81,4 +81,4 @@ cppcheck:
 	-i external\printf
 
 format:
-	@$(CLANG-FORMAT) -i $(SOURCES)
+	@$(FORMAT) -i $(SOURCES)
