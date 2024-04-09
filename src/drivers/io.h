@@ -67,7 +67,7 @@ typedef enum {
 typedef enum{
     IO_IN_LOW,
     IO_IN_HIGH,
-} io_in_e
+} io_in_e;
 #endif
 void io_set_select(io_e io,io_select_e select);
 void io_set_direction(io_e io,io_dir_e direction);
