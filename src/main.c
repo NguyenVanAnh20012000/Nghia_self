@@ -44,9 +44,9 @@ static void test_launchpad_io_pins_output(void)
     }
     while (1) {
         for (io_generic_e io = IO_10; io <= IO_27; io++) {
-            io_set_out(io, IO_OUT_HIGH);
+            io_set_output(io, IO_OUT_HIGH);
             __delay_cycles(10000);
-            io_set_out(io, IO_OUT_LOW);
+            io_set_output(io, IO_OUT_LOW);
         }
     }
 }
