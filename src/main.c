@@ -17,10 +17,10 @@ static void test_blink_led (void) {
     // TODO: Replace with LED driver
     const struct io_config led_config =
     {
-        .dir = IO_DIR_OUTPUT,
+        .direction = IO_DIR_OUTPUT,
         .select = IO_SELECT_GPIO,
         .resistor = IO_RESISTOR_DISABLED,
-        .out = IO_OUT_LOW
+        .output = IO_OUT_LOW
     };
     io_configure(IO_TEST_LED, &led_config);
     io_out_e out = IO_OUT_LOW;
@@ -35,8 +35,8 @@ static void test_launchpad_io_pins_output(void)
     test_setup();
     const struct io_config output_config = { .select = IO_SELECT_GPIO,
                                             .resistor = IO_RESISTOR_DISABLED,
-                                            .dir = IO_DIR_OUTPUT,
-                                            .out = IO_OUT_LOW };
+                                            .direction = IO_DIR_OUTPUT,
+                                            .output = IO_OUT_LOW };
     // Configure all pins as output
     for (io_generic_e io = IO_10; io <= IO_27; io++)
     {
