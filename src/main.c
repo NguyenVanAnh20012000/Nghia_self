@@ -98,9 +98,8 @@ static void test_launchpad_io_pins_input(void)
 }
 int main () {
     // WDTCTL = WDTPW + WDTHOLD; // stop watchdog timer
-    // test_blink_led();
-    // test_blink_led();
-    // test_launchpad_io_pins_output();
+    test_blink_led();
+    test_launchpad_io_pins_output();
     test_launchpad_io_pins_input();
     return 0;
 }
