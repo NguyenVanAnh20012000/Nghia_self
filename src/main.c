@@ -26,7 +26,7 @@ static void test_blink_led (void) {
     io_out_e out = IO_OUT_LOW;
     while (1) {
         out = (out == IO_OUT_LOW) ? IO_OUT_HIGH : IO_OUT_LOW;
-        io_set_out(IO_TEST_LED, out);
+        io_set_output(IO_TEST_LED, out);
         __delay_cycles(250000); // 250 ms
     }
 }
