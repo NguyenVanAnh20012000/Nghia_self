@@ -94,6 +94,7 @@ static void test_launchpad_io_pins_input(void)
         __delay_cycles(500000); // 500 ms
         io_set_output(io_led, IO_OUT_LOW);
         __delay_cycles(2000000); // 2000 ms
+        __delay_cycles(2000000); // 2000 ms
     }
 }
 int main () {
