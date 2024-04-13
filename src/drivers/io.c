@@ -91,7 +91,7 @@ static const struct io_config io_initial_configs[IO_PORT_CNT * IO_PIN_CNT_PER_PO
     /* Input
      * Range sensor provides open-drain output and should be connected to an external pull-up
      * resistor, but I mised that on the PCB, so use the internal pull-up instead. */
-    [IO_RANGE_SENSOR_FRONT_INT] = { IO_SELECT_GPIO, IO_RESISTOR_DISABLED, IO_DIR_INPUT,
+    [IO_RANGE_SENSOR_FRONT_INT] = { IO_SELECT_GPIO, IO_RESISTOR_ENABLED, IO_DIR_INPUT,
                                     IO_OUT_HIGH },
 
     // Outputs
