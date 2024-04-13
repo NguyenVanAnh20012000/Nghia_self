@@ -15,13 +15,10 @@ static void test_blink_led (void) {
     // }
     test_setup();
     // TODO: Replace with LED driver
-    const struct io_config led_config =
-    {
-        .direction = IO_DIR_OUTPUT,
-        .select = IO_SELECT_GPIO,
-        .resistor = IO_RESISTOR_DISABLED,
-        .output = IO_OUT_LOW
-    };
+    const struct io_config led_config = { .direction = IO_DIR_OUTPUT,
+                                          .select = IO_SELECT_GPIO,
+                                          .resistor = IO_RESISTOR_DISABLED,
+                                          .output = IO_OUT_LOW };
     io_configure(IO_TEST_LED, &led_config);
     io_out_e out = IO_OUT_LOW;
     while (1) {
@@ -50,6 +47,7 @@ static void test_launchpad_io_pins_output(void)
         }
     }
 }
+#if 0
 static void test_launchpad_io_pins_input(void)
 {
     test_setup();
@@ -97,10 +95,11 @@ static void test_launchpad_io_pins_input(void)
         __delay_cycles(2000000); // 2000 ms
     }
 }
+#endif
 int main () {
     // WDTCTL = WDTPW + WDTHOLD; // stop watchdog timer
     test_blink_led();
-    test_launchpad_io_pins_output();
-    test_launchpad_io_pins_input();
+    // test_launchpad_io_pins_output();
+    // test_launchpad_io_pins_input();
     return 0;
 }
