@@ -27,26 +27,26 @@ static void test_blink_led (void) {
         __delay_cycles(250000); // 250 ms
     }
 }
-static void test_launchpad_io_pins_output(void)
-{
-    test_setup();
-    const struct io_config output_config = { .select = IO_SELECT_GPIO,
-                                            .resistor = IO_RESISTOR_DISABLED,
-                                            .direction = IO_DIR_OUTPUT,
-                                            .output = IO_OUT_LOW };
-    // Configure all pins as output
-    for (io_generic_e io = IO_10; io <= IO_27; io++)
-    {
-        io_configure(io, &output_config);
-    }
-    while (1) {
-        for (io_generic_e io = IO_10; io <= IO_27; io++) {
-            io_set_output(io, IO_OUT_HIGH);
-            __delay_cycles(10000);
-            io_set_output(io, IO_OUT_LOW);
-        }
-    }
-}
+// static void test_launchpad_io_pins_output(void)
+// {
+//     test_setup();
+//     const struct io_config output_config = { .select = IO_SELECT_GPIO,
+//                                             .resistor = IO_RESISTOR_DISABLED,
+//                                             .direction = IO_DIR_OUTPUT,
+//                                             .output = IO_OUT_LOW };
+//     // Configure all pins as output
+//     for (io_generic_e io = IO_10; io <= IO_27; io++)
+//     {
+//         io_configure(io, &output_config);
+//     }
+//     while (1) {
+//         for (io_generic_e io = IO_10; io <= IO_27; io++) {
+//             io_set_output(io, IO_OUT_HIGH);
+//             __delay_cycles(10000);
+//             io_set_output(io, IO_OUT_LOW);
+//         }
+//     }
+// }
 #if 0
 static void test_launchpad_io_pins_input(void)
 {
