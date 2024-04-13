@@ -1,6 +1,5 @@
 #ifndef IO_H
 #define IO_H
-#define LAUNCHPAD
 typedef enum {
     IO_10,IO_11,IO_12,IO_13,IO_14,IO_15,IO_16,IO_17,
     IO_20,IO_21,IO_22,IO_23,IO_24,IO_25,IO_26,IO_27,

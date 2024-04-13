@@ -1,11 +1,22 @@
 # TOOLS_PATH = /home/nghia/Downloads
+# Check arguments
+ifeq ($(HW),LAUNCHPAD) # HW argument
+TARGET_NAME=launchpad
+else ifeq ($(HW),NSUMO)
+TARGET_NAME=nsumo
+else ifeq ($(MAKECMDGOALS),clean)
+else ifeq ($(MAKECMDGOALS),cppcheck)
+else ifeq ($(MAKECMDGOALS),format)
+# HW argument not required for this rule
+else
+$(error "Must pass HW=LAUNCHPAD or HW=NSUMO")
+endif
 TOOLS_DIR = $(TOOLS_PATH)
 MSPGCC_ROOT_DIR = $(TOOLS_DIR)/msp430-gcc
 MSPGCC_BIN_DIR = $(MSPGCC_ROOT_DIR)/bin
 MSPGCC_INCLUDE_DIR = $(MSPGCC_ROOT_DIR)/include
 BUILD_DIR = build
 OBJ_DIR = $(BUILD_DIR)/obj
-BIN_DIR = $(BUILD_DIR)/bin
 TI_CCS_DIR = $(TOOLS_DIR)/ti/ccs1260/ccs
 DEBUG_BIN_DIR = $(TI_CCS_DIR)/ccs_base/DebugServer/bin
 DEBUG_DRIVERS_DIR = $(TI_CCS_DIR)/ccs_base/DebugServer/drivers
@@ -24,7 +35,7 @@ CPPCHECK = cppcheck
 FORMAT = clang-format-12
 
 # Files
-TARGET = $(BIN_DIR)/nsumo
+TARGET = $(BUILD_DIR)/$(TARGET_NAME)
 
 SOURCES_WITH_HEADERS = \
 				src/drivers/mcu_init.c \
@@ -40,6 +51,9 @@ HEADERS = \
 
 OBJECT_NAMES = $(SOURCES:.c=.o)
 OBJECTS = $(patsubst %,$(OBJ_DIR)/%,$(OBJECT_NAMES))
+# Defines
+HW_DEFINE = $(addprefix -D,$(HW))
+DEFINES = $(HW_DEFINE)
 # Static Analysis
 ## Don't check the msp430 helper headers (they have a LOT of ifdefs)
 CPPCHECK_INCLUDES = ./src
@@ -55,8 +69,8 @@ CPPCHECK_FLAGS = \
 # Flags
 MCU = msp430g2553
 WFLAGS = -Wall -Wextra -Werror -Wshadow
-CFLAGS = -mmcu=$(MCU) $(WFLAGS) $(addprefix -I,$(INCLUDE_DIRS)) -Og -g
-LDFLAGS = -mmcu=$(MCU) $(addprefix -L,$(LIB_DIRS))
+CFLAGS = -mmcu=$(MCU) $(WFLAGS) $(addprefix -I,$(INCLUDE_DIRS)) $(DEFINES) -Og -g
+LDFLAGS = -mmcu=$(MCU) $(DEFINES) $(addprefix -L,$(LIB_DIRS))
 
 # Build
 ## Linking
