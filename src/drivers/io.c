@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <assert.h>
 #include <msp430.h>
+#include "common/assert_handler.h"
 static_assert(sizeof(io_generic_e) == 1, "Unexpected size, -fshort-enums missing?");
 #if defined(LAUNCHPAD)
 #define IO_PORT_CNT (2u)
@@ -137,17 +138,13 @@ void io_init(void)
 {
     #if defined(NSUMO)
     // TODO: Assert
-    if (io_detect_hw_type() != HW_TYPE_NSUMO) {
-        while (1) { }
-    }
+    ASSERT(io_detect_hw_type() == HW_TYPE_NSUMO);
 #elif defined(LAUNCHPAD)
     // TODO: Assert
-    if (io_detect_hw_type() != HW_TYPE_LAUNCHPAD) {
-        while (1) { }
-    }
+    ASSERT(io_detect_hw_type() == HW_TYPE_LAUNCHPAD);
 #else
     // TODO: Assert
-    while (1) { }
+    ASSERT(0);
 #endif
     // TODO: Loop initialize all pins
     for (io_e io = (io_e)IO_10; io < ARRAY_SIZE(io_initial_configs); io++) {
