@@ -159,6 +159,24 @@ void io_configure (io_e io,const struct io_config *config) {
     io_set_output(io,config->output);
     io_set_resistor(io,config->resistor);
 }
+void io_get_current_config(io_e io, struct io_config *current_config)
+{
+    const uint8_t port = io_port(io);
+    const uint8_t pin = io_pin_bit(io);
+    const uint8_t sel1 = *port_sel1_regs[port] & pin;
+    const uint8_t sel2 = *port_sel2_regs[port] & pin;
+    current_config->select = (io_select_e)((sel2 << 1) | sel1);
+    current_config->resistor = (io_resistor_e)(*port_ren_regs[port] & pin);
+    current_config->direction = (io_dir_e)(*port_dir_regs[port] & pin);
+    current_config->output = (io_out_e)(*port_out_regs[port] & pin);
+}
+
+bool io_config_compare(const struct io_config *cfg1, const struct io_config *cfg2)
+{
+    return (cfg1->direction == cfg2->direction) && (cfg1->output == cfg2->output)
+        && (cfg1->resistor == cfg2->resistor) && (cfg1->select == cfg2->select);
+}
+
 
 void io_set_select (io_e io,io_select_e select) {
     const uint8_t port = io_port(io);
