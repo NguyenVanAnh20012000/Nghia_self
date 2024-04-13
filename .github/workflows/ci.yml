@@ -9,4 +9,5 @@ jobs:
         uses: actions/checkout@v3
       - run: make format
       - run: make cppcheck
-      - run: TOOLS_PATH=/home/ubuntu/dev/tools make
+      - run: TOOLS_PATH=/home/ubuntu/dev/tools make HW=LAUNCHPAD
+      - run: TOOLS_PATH=/home/ubuntu/dev/tools make HW=NSUMO
