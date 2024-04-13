@@ -1,7 +1,9 @@
 #include "drivers/io.h" //defines enum for name of register function
 #include "common/defines.h" //defines UNUSED MACRO
 #include <stdint.h>
+#include <assert.h>
 #include <msp430.h>
+static_assert(sizeof(io_generic_e) == 1, "Unexpected size, -fshort-enums missing?");
 #if defined(LAUNCHPAD)
 #define IO_PORT_CNT (2u)
 #elif defined(NSUMO)
