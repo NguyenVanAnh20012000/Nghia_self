@@ -1,9 +1,9 @@
 # TOOLS_PATH = /home/nghia/Downloads
 # Check arguments
 ifeq ($(HW),LAUNCHPAD) # HW argument
-TARGET_NAME=launchpad
+TARGET_HW=launchpad
 else ifeq ($(HW),NSUMO)
-TARGET_NAME=nsumo
+TARGET_HW=nsumo
 else ifeq ($(MAKECMDGOALS),clean)
 else ifeq ($(MAKECMDGOALS),cppcheck)
 else ifeq ($(MAKECMDGOALS),format)
@@ -11,11 +11,20 @@ else ifeq ($(MAKECMDGOALS),format)
 else
 $(error "Must pass HW=LAUNCHPAD or HW=NSUMO")
 endif
+TARGET_NAME=$(TARGET_HW)
+
+ifneq ($(TEST),) # TEST argument
+ifeq ($(findstring test_,$(TEST)),)
+$(error "TEST=$(TEST) is invalid (test function must start with test_)")
+else
+TARGET_NAME=$(TEST)
+endif
+endif
 TOOLS_DIR = $(TOOLS_PATH)
 MSPGCC_ROOT_DIR = $(TOOLS_DIR)/msp430-gcc
 MSPGCC_BIN_DIR = $(MSPGCC_ROOT_DIR)/bin
 MSPGCC_INCLUDE_DIR = $(MSPGCC_ROOT_DIR)/include
-BUILD_DIR = build/$(TARGET_NAME)
+BUILD_DIR = build
 OBJ_DIR = $(BUILD_DIR)/obj
 TI_CCS_DIR = $(TOOLS_DIR)/ti/ccs1260/ccs
 # TI_CCS_DIR = /home/nghia/ti/ccs1260/ccs
@@ -36,7 +45,7 @@ CPPCHECK = cppcheck
 FORMAT = clang-format-12
 
 # Files
-TARGET = $(BUILD_DIR)/$(TARGET_NAME)
+TARGET = $(BUILD_DIR)/bin/$(TARGET_HW)/$(TARGET_NAME)
 
 SOURCES_WITH_HEADERS = \
 				src/common/assert_handler.c \
@@ -45,9 +54,17 @@ SOURCES_WITH_HEADERS = \
 				src/drivers/led.c \
 				src/app/drive.c \
 				src/app/enemy.c
+ifndef TEST
 SOURCES = \
 				src/main.c \
 				$(SOURCES_WITH_HEADERS)
+else
+SOURCES = \
+		src/test/test.c \
+		$(SOURCES_WITH_HEADERS)
+# Delete object file to force rebuild when changing test (there is probably a better way...)
+$(shell rm -f $(BUILD_DIR)/obj/src/test/test.o)
+endif
 HEADERS = \
 				$(SOURCES_WITH_HEADERS.c=.h) \
 				src/common/defines.h
@@ -56,7 +73,10 @@ OBJECT_NAMES = $(SOURCES:.c=.o)
 OBJECTS = $(patsubst %,$(OBJ_DIR)/%,$(OBJECT_NAMES))
 # Defines
 HW_DEFINE = $(addprefix -D,$(HW))
-DEFINES = $(HW_DEFINE)
+TEST_DEFINE = $(addprefix -DTEST=,$(TEST))
+DEFINES = \
+	$(HW_DEFINE) \
+	$(TEST_DEFINE)
 # Static Analysis
 ## Don't check the msp430 helper headers (they have a LOT of ifdefs)
 CPPCHECK_INCLUDES = ./src
