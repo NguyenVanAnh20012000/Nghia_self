@@ -35,8 +35,7 @@ void assert_handler(void)
         // Blink LED on both targets in case the wrong target was flashed
         P1OUT ^= BIT0;
         P2OUT ^= BIT6;
-        for(i=0;i<30000;i++){
-        }   
+        for (i = 0; i < 30000; i++) { }
         // BUSY_WAIT_ms(5000);
     };
 }

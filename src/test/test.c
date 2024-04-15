@@ -5,30 +5,22 @@
 #include "common/assert_handler.h"
 #include "common/defines.h"
 #include <stdbool.h>
+SUPPRESS_UNUSED
 static void test_setup(void)
 {
     mcu_init();
 }
 
 // TODO: Move to test file
-// static void test_assert(void)
-// {
-//     test_setup();
-//     ASSERT(0);
-// }
-
-
-static void test_blink_led (void) {
-    // P1DIR |= BIT0;
-    // volatile unsigned int i; // volatile to prevent optimization
-    
-    // while (1) {
-    //     P1OUT ^= BIT0;
-    //     for (i = 10000; i > 0; i--) { } // delay
-    // }
+SUPPRESS_UNUSED
+static void test_assert(void)
+{
     test_setup();
-    // TODO: Replace with LED driver
-    // bool a = true;
+    ASSERT(0);
+}
+SUPPRESS_UNUSED
+static void test_blink_led (void) {
+    test_setup();
     led_init();
     led_state_e led_state = LED_STATE_OFF;
     while (1) {
@@ -37,27 +29,28 @@ static void test_blink_led (void) {
         BUSY_WAIT_ms(5000);// delay us
     }
 }
-// static void test_launchpad_io_pins_output(void)
-// {
-//     test_setup();
-//     const struct io_config output_config = { .select = IO_SELECT_GPIO,
-//                                             .resistor = IO_RESISTOR_DISABLED,
-//                                             .direction = IO_DIR_OUTPUT,
-//                                             .output = IO_OUT_LOW };
-//     // Configure all pins as output
-//     for (io_generic_e io = IO_10; io <= IO_27; io++)
-//     {
-//         io_configure(io, &output_config);
-//     }
-//     while (1) {
-//         for (io_generic_e io = IO_10; io <= IO_27; io++) {
-//             io_set_output(io, IO_OUT_HIGH);
-//             BUSY_WAIT_ms(10);
-//             io_set_output(io, IO_OUT_LOW);
-//         }
-//     }
-// }
-#if 0
+SUPPRESS_UNUSED
+static void test_launchpad_io_pins_output(void)
+{
+    test_setup();
+    const struct io_config output_config = { .select = IO_SELECT_GPIO,
+                                            .resistor = IO_RESISTOR_DISABLED,
+                                            .direction = IO_DIR_OUTPUT,
+                                            .output = IO_OUT_LOW };
+    // Configure all pins as output
+    for (io_generic_e io = IO_10; io <= IO_27; io++)
+    {
+        io_configure(io, &output_config);
+    }
+    while (1) {
+        for (io_generic_e io = IO_10; io <= IO_27; io++) {
+            io_set_output(io, IO_OUT_HIGH);
+            BUSY_WAIT_ms(10);
+            io_set_output(io, IO_OUT_LOW);
+        }
+    }
+}
+SUPPRESS_UNUSED
 static void test_launchpad_io_pins_input(void)
 {
     test_setup();
@@ -97,12 +90,8 @@ static void test_launchpad_io_pins_input(void)
         BUSY_WAIT_ms(2000);
     }
 }
-#endif
+
 int main () {
-    // WDTCTL = WDTPW + WDTHOLD; // stop watchdog timer
-    // test_assert();
-    test_blink_led();
-    // test_launchpad_io_pins_output();
-    // test_launchpad_io_pins_input();
-    return 0;
+    TEST();
+    ASSERT(0);
 }

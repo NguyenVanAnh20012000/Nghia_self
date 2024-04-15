@@ -6,7 +6,6 @@ static void test_setup(void)
 }
 int main(void)
 {
-    test_setup();
     ASSERT(0);
     return 0;
 }
