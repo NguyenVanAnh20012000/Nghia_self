@@ -29,11 +29,14 @@ void assert_handler(void)
     P2SEL2 &= ~(BIT6);
     P2DIR |= BIT6;
     P2REN &= ~(BIT6);
+    unsigned int i;
 
     while (1) {
         // Blink LED on both targets in case the wrong target was flashed
         P1OUT ^= BIT0;
         P2OUT ^= BIT6;
-        BUSY_WAIT_ms(5000);
+        for(i=0;i<30000;i++){
+        }   
+        // BUSY_WAIT_ms(5000);
     };
 }
