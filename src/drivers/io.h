@@ -98,7 +98,7 @@ void io_set_direction(io_e io,io_dir_e direction);
 void io_set_output(io_e io,io_out_e output);
 io_in_e io_get_input(io_e io);
 void io_set_resistor(io_e io,io_resistor_e resistor);
-void io_configure_interrupt(io_e io;io_trigger_e trigger;isr_function isr);
+void io_configure_interrupt(io_e io,io_trigger_e trigger,isr_function isr);
 void io_deconfigure_interrupt(io_e io);
 void io_enable_interrupt(io_e io);
 void io_disable_interrupt(io_e io);

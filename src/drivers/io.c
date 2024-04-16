@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <assert.h>
 #include <msp430.h>
+#include <stddef.h>
 #include "common/assert_handler.h"
 static_assert(sizeof(io_generic_e) == 1, "Unexpected size, -fshort-enums missing?");
 #if defined(LAUNCHPAD)
@@ -14,7 +15,7 @@ static_assert(sizeof(io_generic_e) == 1, "Unexpected size, -fshort-enums missing
 #define IO_PIN_MASK (0x7u)
 #define IO_PIN_CNT_PER_PORT (8u)
 #define IO_PORT_MASK (0x3u << IO_PORT_OFFSET)
-#define IO_INTERRUPT_PORT_CNT(2u)
+#define IO_INTERRUPT_PORT_CNT (2u)
 static inline uint8_t io_port(io_e io)
 {
     return (io & IO_PORT_MASK)
@@ -30,10 +31,11 @@ static inline uint8_t io_pin_bit(io_e io)
         1 << io_pin_idx(
             io)); // TAKES ASSOCIATED PIN POSITION (POSITION 1 TO 8 CORRESPOND TO PIN .0 TO PIN .7)
 }
-typedef enum {
+typedef enum
+{
     IO_PORT_1,
     IO_PORT_2,
-#if define(NSUMO)
+#if defined(NSUMO)
     IO_PORT_3,
 #endif
 } io_port_e;
@@ -52,13 +54,14 @@ static volatile uint8_t *const port_ren_regs[IO_PORT_CNT] = { &P1REN, &P2REN, &P
 static volatile uint8_t *const port_sel1_regs[IO_PORT_CNT] = { &P1SEL, &P2SEL, &P3SEL };
 static volatile uint8_t *const port_sel2_regs[IO_PORT_CNT] = { &P1SEL2, &P2SEL2, &P3SEL2 };
 #endif
-static volatile uint8_t *const port_interrupt_flag_regs[IO_INTERRUPT_PORT_CNT] = {&P1IFG,&P2IFG};
-static volatile uint8_t *const port_interrupt_enable_regs[IO_INTERRUPT_PORT_CNT] = {&P1IE,&P2IE};
-static volatile uint8_t *const port_interrupt_edge_select_regs[IO_INTERRUPT_PORT_CNT] = {&P1IES,&P2IES};
-static isr_function isr_functions[IO_INTERRUPT_PORT_CNT][IO_PIN_CNT_PER_PORT] ={
-    [IO_PORT_1] = {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
-    [IO_PORT_2] = {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
-};Q
+static volatile uint8_t *const port_interrupt_flag_regs[IO_INTERRUPT_PORT_CNT] = { &P1IFG, &P2IFG };
+static volatile uint8_t *const port_interrupt_enable_regs[IO_INTERRUPT_PORT_CNT] = { &P1IE, &P2IE };
+static volatile uint8_t *const port_interrupt_edge_select_regs[IO_INTERRUPT_PORT_CNT] = { &P1IES,
+                                                                                          &P2IES };
+static isr_function isr_functions[IO_INTERRUPT_PORT_CNT][IO_PIN_CNT_PER_PORT] = {
+    [IO_PORT_1] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
+    [IO_PORT_2] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
+};
 #define UNUSED_CONFIG                                                                              \
     {                                                                                              \
         IO_SELECT_GPIO, IO_RESISTOR_ENABLED, IO_DIR_OUTPUT, IO_OUT_LOW                             \
@@ -263,65 +266,76 @@ io_in_e io_get_input(io_e io)
 {
     return (*port_in_regs[io_port(io)] & io_pin_bit(io)) ? IO_IN_HIGH : IO_IN_LOW;
 }
-static void io_clear_interrupt(io_e io) {
+static void io_clear_interrupt(io_e io)
+{
     *port_interrupt_flag_regs[io_port(io)] &= ~io_pin_bit(io);
 }
-static void io_set_interrupt_trigger (io_e io,io_trigger_e trigger) {
+static void io_set_interrupt_trigger(io_e io, io_trigger_e trigger)
+{
     const uint8_t port = io_port(io);
     const uint8_t pin = io_pin_bit(io);
     switch (trigger) {
-        case IO_TRIGGER_FALLING:
-            *port_interrupt_edge_select_regs[port] |= pin;
-            break;
-        case IO_TRIGGER_RISING:
-            *port_interrupt_edge_select_regs[port] &= ~pin;
-            break;
+    case IO_TRIGGER_FALLING:
+        *port_interrupt_edge_select_regs[port] |= pin;
+        break;
+    case IO_TRIGGER_RISING:
+        *port_interrupt_edge_select_regs[port] &= ~pin;
+        break;
     }
     io_clear_interrupt(io);
 }
-static void io_register_isr(io_e io,isr_function isr) {
+static void io_register_isr(io_e io, isr_function isr)
+{
     const uint8_t port = io_port(io);
     const uint8_t pin_idx = io_pin_idx(io);
-    ASSERT(isr_functions[port][pin_idx]==NULL);
+    ASSERT(isr_functions[port][pin_idx] == NULL);
     isr_functions[port][pin_idx] = isr;
 }
-void io_configure_interrupt(io_e io,io_trigger_e trigger,isr_function isr) {
+void io_configure_interrupt(io_e io, io_trigger_e trigger, isr_function isr)
+{
     io_set_interrupt_trigger(io, trigger);
     io_register_isr(io, isr);
 }
-static inline void io_unconfigure_isr(io_e io) {
+static inline void io_unconfigure_isr(io_e io)
+{
     const uint8_t port = io_port(io);
     const uint8_t pin_idx = io_pin_idx(io);
     isr_functions[port][pin_idx] = NULL;
 }
-void io_disable_interrupt(io_e io) {
+void io_disable_interrupt(io_e io)
+{
     *port_interrupt_enable_regs[io_port(io)] &= ~io_pin_bit(io);
 }
-void io_enable_interrupt(io_e io) {
+void io_enable_interrupt(io_e io)
+{
     *port_interrupt_enable_regs[io_port(io)] |= io_pin_bit(io);
 }
-void io_deconfigure_interrupt(io_e io) {
+void io_deconfigure_interrupt(io_e io)
+{
     io_unconfigure_isr(io);
     io_disable_interrupt(io);
 }
-static void io_isr(io_e io) {
+static void io_isr(io_e io)
+{
     const uint8_t port = io_port(io);
     const uint8_t pin = io_pin_bit(io);
     const uint8_t pin_idx = io_pin_idx(io);
     if (*port_interrupt_flag_regs[port] & pin) {
-        if (isr_functions[port][pin_idx]!= NULL){
-            isr_functions[port][pin_idx] ();
+        if (isr_functions[port][pin_idx] != NULL) {
+            isr_functions[port][pin_idx]();
         }
     }
     io_clear_interrupt(io);
 }
-INTERRUPT_FUNCTION(PORT1_VECTOR) isr_port_1(void) {
-    for (io_generic_e io=IO_10;io<=IO_17;io++) {
+INTERRUPT_FUNCTION(PORT1_VECTOR) isr_port_1(void)
+{
+    for (io_generic_e io = IO_10; io <= IO_17; io++) {
         io_isr(io);
     }
 }
-INTERRUPT_FUNCTION(PORT2_VECTOR) isr_port_2(void) {
-    for (io_generic_e io=IO_20;io<=IO_27;io++) {
+INTERRUPT_FUNCTION(PORT2_VECTOR) isr_port_2(void)
+{
+    for (io_generic_e io = IO_20; io <= IO_27; io++) {
         io_isr(io);
     }
 }

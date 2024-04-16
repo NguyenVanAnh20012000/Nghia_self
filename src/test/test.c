@@ -109,8 +109,8 @@ static void test_io_interrupt(void)
     const struct io_config input_config = {
         .select = IO_SELECT_GPIO,
         .resistor = IO_RESISTOR_ENABLED,
-        .dir = IO_DIR_INPUT,
-        .out = IO_OUT_HIGH // pull-up
+        .direction = IO_DIR_INPUT,
+        .output = IO_OUT_HIGH // pull-up
     };
     io_configure(IO_11, &input_config);
     io_configure(IO_20, &input_config);
