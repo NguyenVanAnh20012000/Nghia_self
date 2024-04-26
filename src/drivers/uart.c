@@ -72,7 +72,7 @@ void uart_putchar_interrupt(char c) {
     }
 }
 void uart_print_interrupt(const char*string) {
-    int i ;
+    int i = 0;
     while (string[i] != '\0') {
         uart_putchar_interrupt(string[i]);
         i++;
