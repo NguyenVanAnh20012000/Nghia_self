@@ -5,6 +5,7 @@
 #include "common/assert_handler.h"
 #include "common/defines.h"
 #include <stdbool.h>
+#include "drivers/uart.h"
 SUPPRESS_UNUSED
 static void test_setup(void)
 {
@@ -120,6 +121,16 @@ static void test_io_interrupt(void)
     io_enable_interrupt(IO_11);
     io_enable_interrupt(IO_20);
     while(1);
+}
+SUPPRESS_UNUSED
+static void test_uart(void)
+{
+    test_setup();
+    uart_init();
+    while (1) {
+        uart_print_interrupt("Artful Bytes\n");
+        BUSY_WAIT_ms(100);
+    }
 }
 
 int main () {
