@@ -5,6 +5,7 @@
 #include "common/assert_handler.h"
 #include "common/defines.h"
 #include <stdbool.h>
+#include "drivers/uart.h"
 SUPPRESS_UNUSED
 static void test_setup(void)
 {
