@@ -22,7 +22,7 @@ bool ring_buffer_empty(const struct ring_buffer *rb) {
 }
 bool ring_buffer_full(const struct ring_buffer *rb) {
     uint8_t idx_after_head = rb->head+1;
-    if (idx_after_head == size) {
+    if (idx_after_head == rb->size) {
         idx_after_head = 0;
     }
     return (idx_after_head == rb->tail);
