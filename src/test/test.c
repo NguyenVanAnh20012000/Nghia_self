@@ -124,7 +124,7 @@ static void test_io_interrupt(void)
 }
 SUPPRESS_UNUSED
 static void test_uart(void)
-{
+{   
     test_setup();
     uart_init();
     while (1) {

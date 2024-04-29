@@ -18,11 +18,11 @@ uint8_t ring_buffer_get(struct ring_buffer *rb)
 }
 uint8_t ring_buffer_peek(const struct ring_buffer *rb)
 {
-    return (rb->buffer[rb->tail]);
+    return rb->buffer[rb->tail];
 }
 bool ring_buffer_empty(const struct ring_buffer *rb)
 {
-    return (rb->head == rb->tail);
+    return rb->head == rb->tail;
 }
 bool ring_buffer_full(const struct ring_buffer *rb)
 {
@@ -30,5 +30,5 @@ bool ring_buffer_full(const struct ring_buffer *rb)
     if (idx_after_head == rb->size) {
         idx_after_head = 0;
     }
-    return (idx_after_head == rb->tail);
+    return idx_after_head == rb->tail;
 }
