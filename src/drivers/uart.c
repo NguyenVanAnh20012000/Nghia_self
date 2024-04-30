@@ -50,10 +50,8 @@ INTERRUPT_FUNCTION(USCIAB0TX_VECTOR) isr_uart_tx()
         uart_tx_start();
     }
 }
-static bool initialized = false;
-void uart_init(void)
+static void uart_configure(void)
 {
-    ASSERT(!initialized);
     UCA0CTL1 &= UCSWRST;
     UCA0CTL0 = 0;
     UCA0CTL1 |= UCSSEL_2;
@@ -61,12 +59,19 @@ void uart_init(void)
     UCA0BR1 = UART_DIVISOR_INT_HIGH_BYTE;
     UCA0MCTL = (UART_UCBRF << 4) + (UART_UCBRS << 1) + UART_UC0S16;
     UCA0CTL1 &= ~UCSWRST;
+}
+static bool initialized = false;
+void uart_init(void)
+{
+    ASSERT(!initialized);
+    uart_configure();
     uart_tx_clear_interrupt();
     uart_tx_enable_interrupt();
     initialized = true;
 }
-void _putchar(char c) {
-    while (ring_buffer_full(&tx_buffer)) {}
+void _putchar(char c)
+{
+    while (ring_buffer_full(&tx_buffer)) { }
     uart_tx_disable_interrupt();
     const bool tx_ongoing = !ring_buffer_empty(&tx_buffer);
     ring_buffer_put(&tx_buffer, c);
@@ -75,6 +80,29 @@ void _putchar(char c) {
     }
     uart_tx_enable_interrupt();
     if (c == '\n') {
-       _putchar('\r');
+        _putchar('\r');
+    }
+}
+void uart_init_assert(void)
+{
+    uart_tx_disable_interrupt();
+    uart_configure();
+}
+static void uart_putchar_polling(char c)
+{
+    while (!(IFG2 & UCA0TXIFG)) { }
+    UCA0TXBUF = c;
+    if (c == '\n') {
+        while (!(IFG2 & UCA0TXIFG)) { }
+        uart_putchar_polling('\r');
+    }
+}
+
+void uart_trace_assert(const char *string)
+{
+    int i = 0;
+    while (string[i] != '\0') {
+        uart_putchar_polling(string[i]);
+        i++;
     }
 }

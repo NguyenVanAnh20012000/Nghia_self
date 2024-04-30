@@ -1,4 +1,4 @@
-# TOOLS_PATH = /home/nghia/Downloads
+TOOLS_PATH = /home/nghia/Downloads
 # Check arguments
 ifeq ($(HW),LAUNCHPAD) # HW argument
 TARGET_HW=launchpad
@@ -26,8 +26,8 @@ MSPGCC_BIN_DIR = $(MSPGCC_ROOT_DIR)/bin
 MSPGCC_INCLUDE_DIR = $(MSPGCC_ROOT_DIR)/include
 BUILD_DIR = build
 OBJ_DIR = $(BUILD_DIR)/obj
-TI_CCS_DIR = $(TOOLS_DIR)/ti/ccs1260/ccs
-# TI_CCS_DIR = /home/nghia/ti/ccs1260/ccs
+# TI_CCS_DIR = $(TOOLS_DIR)/ti/ccs1260/ccs
+TI_CCS_DIR = /home/nghia/ti/ccs1260/ccs
 DEBUG_BIN_DIR = $(TI_CCS_DIR)/ccs_base/DebugServer/bin
 DEBUG_DRIVERS_DIR = $(TI_CCS_DIR)/ccs_base/DebugServer/drivers
 
@@ -45,6 +45,7 @@ CPPCHECK = cppcheck
 FORMAT = clang-format-12
 SIZE = $(MSPGCC_BIN_DIR)/msp430-elf-size
 READELF = $(MSPGCC_BIN_DIR)/msp430-elf-readelf
+ADDR2LINE = $(MSPGCC_BIN_DIR)/msp430-elf-addr2line
 # Files
 TARGET = $(BUILD_DIR)/bin/$(TARGET_HW)/$(TARGET_NAME)
 
@@ -138,3 +139,6 @@ size: $(TARGET)
 symbols: $(TARGET)
 	# List symbols table sorted by size
 	@$(READELF) -s $(TARGET) | sort -n -k3
+
+addr2line: $(TARGET)
+	@$(ADDR2LINE) -e $(TARGET) $(ADDR)
