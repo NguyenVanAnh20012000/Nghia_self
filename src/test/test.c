@@ -8,6 +8,7 @@
 #include "drivers/uart.h"
 #include "external/printf/printf.h"
 #include "common/trace.h"
+#include "common/assert_handler.h"
 SUPPRESS_UNUSED
 static void test_setup(void)
 {
