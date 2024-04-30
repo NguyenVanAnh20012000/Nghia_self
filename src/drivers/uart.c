@@ -1,6 +1,7 @@
 #include "drivers/uart.h"
 #include "common/ring_buffer.h"
 #include "common/assert_handler.h"
+#include "common/defines.h"
 #include <msp430.h>
 #include <assert.h>
 #include <stdint.h>
@@ -40,7 +41,7 @@ static void uart_tx_start(void)
         UCA0TXBUF = ring_buffer_peek(&tx_buffer);
     }
 }
-__attribute__((interrupt(USCIAB0TX_VECTOR))) void isr_uart_tx()
+INTERRUPT_FUNCTION(USCIAB0TX_VECTOR) isr_uart_tx()
 {
     ASSERT_INTERRUPT(!ring_buffer_empty(&tx_buffer));
     ring_buffer_get(&tx_buffer);
@@ -64,8 +65,8 @@ void uart_init(void)
     uart_tx_enable_interrupt();
     initialized = true;
 }
-void uart_putchar_interrupt(char c) {
-    while (ring_buffer_full(&tx_buffer));
+void _putchar(char c) {
+    while (ring_buffer_full(&tx_buffer)) {}
     uart_tx_disable_interrupt();
     const bool tx_ongoing = !ring_buffer_empty(&tx_buffer);
     ring_buffer_put(&tx_buffer, c);
@@ -74,14 +75,6 @@ void uart_putchar_interrupt(char c) {
     }
     uart_tx_enable_interrupt();
     if (c == '\n') {
-        uart_putchar_interrupt('\r');
-    }
-}
-void uart_print_interrupt(const char *string)
-{
-    int i = 0;
-    while (string[i] != '\0') {
-        uart_putchar_interrupt(string[i]);
-        i++;
+       _putchar('\r');
     }
 }
