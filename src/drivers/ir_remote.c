@@ -66,7 +66,7 @@ static inline bool is_valid_pulse(uint16_t pulse, uint8_t ms)
         return ms == 0;
     } else if (pulse == 2) {
         return ms < 10;
-    } else if (pulse >=3 && pulse <=33 ) {
+    } else if (pulse >= 3 && pulse <= 33) {
         return ms < 5;
     } else if (pulse == 34) {
         // if (ms < 50) {
@@ -105,7 +105,7 @@ static void isr_pulse(void)
     timer_stop();
     pulse_count++;
 
-    if (!is_valid_pulse(pulse_count,timer_ms)) {
+    if (!is_valid_pulse(pulse_count, timer_ms)) {
         // Assume start of new message
         pulse_count = 1;
         ir_message.raw = 0;
@@ -143,7 +143,6 @@ ir_cmd_e ir_remote_get_cmd(void)
     }
     io_enable_interrupt(IO_IR_REMOTE);
     return cmd;
-    
 }
 
 void ir_remote_init(void)
