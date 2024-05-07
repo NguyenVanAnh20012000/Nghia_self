@@ -4,6 +4,7 @@
 #include "drivers/uart.h"
 #include "external/printf/printf.h"
 #include <stdbool.h>
+
 static bool initialized = false;
 void trace_init(void)
 {
@@ -11,6 +12,7 @@ void trace_init(void)
     uart_init();
     initialized = true;
 }
+
 void trace(const char *format, ...)
 {
     ASSERT(initialized);
@@ -19,4 +21,5 @@ void trace(const char *format, ...)
     vprintf(format, args);
     va_end(args);
 }
-#endif
+
+#endif // DISABLE_TRACE

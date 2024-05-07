@@ -6,9 +6,11 @@
 #include "common/defines.h"
 #include <stdbool.h>
 #include "drivers/uart.h"
+#include "drivers/ir_remote.h"
 #include "external/printf/printf.h"
 #include "common/trace.h"
 #include "common/assert_handler.h"
+#include "common/ring_buffer.h"
 SUPPRESS_UNUSED
 static void test_setup(void)
 {
@@ -148,9 +150,37 @@ static void test_trace(void)
     trace_init();
     while (1) {
         TRACE("Artful bytes %d",2023);
-        BUSY_WAIT_ms(500);
+        BUSY_WAIT_ms(250);
     }
 }
+
+SUPPRESS_UNUSED
+static void test_ir_remote(void)
+{
+    // mcu_init();
+    test_setup();
+    // P2SEL &= ~BIT0;
+    // P2SEL2 &= ~BIT0;
+    // P2DIR &= ~BIT0;
+    // P2REN &= ~BIT0;
+    // const struct io_config input_config = {
+    //     .select = IO_SELECT_GPIO,
+    //     .resistor = IO_RESISTOR_DISABLED,
+    //     .direction = IO_DIR_INPUT,
+    //     .output = IO_OUT_LOW // pull-up
+    // };
+    // io_configure(IO_IR_REMOTE, &input_config);
+    trace_init();
+    // TA1CTL = (TA1CTL & (~0x0030)) | MC_1 | TACLR;
+    ir_remote_init();
+    while (1) {
+        TRACE("Command %s", ir_remote_cmd_to_string(ir_remote_get_cmd()));
+        BUSY_WAIT_ms(250);
+    }
+}
+
+
+
 int main () {
     TEST();
     ASSERT(0);

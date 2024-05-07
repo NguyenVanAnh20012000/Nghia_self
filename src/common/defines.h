@@ -9,4 +9,5 @@
 #define CYCLES_PER_MS (CYCLES_16MHZ / 1000u)
 #define ms_TO_CYCLES(ms) (CYCLES_PER_MS * ms)
 #define BUSY_WAIT_ms(ms) (__delay_cycles(ms_TO_CYCLES(ms)))
+#define IS_ODD(x) (x & 1)
 #endif
