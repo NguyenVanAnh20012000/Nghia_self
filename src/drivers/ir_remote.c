@@ -6,15 +6,14 @@
 #include <assert.h>
 #include <stdint.h>
 #include "drivers/led.h"
+#include "external/printf/printf.h"
+#include "common/trace.h"
 
-#define TIMER_DIVIDER_ID_3 (8u)
-#define TIMER_MC_MASK (0x0030)
-#define TICKS_PER_ms (CYCLES_16MHZ / TIMER_DIVIDER_ID_3 / 1000u)
+#define TICKS_PER_ms (SMCLK / TIMER_INPUT_DIVIDER_3 / 1000u)
 #define TIMER_INTERRUPT_ms (1u)
 #define TIMER_INTERRUPT_TICKS (TICKS_PER_ms * TIMER_INTERRUPT_ms)
 static_assert(TIMER_INTERRUPT_TICKS <= 0xFFFF, "Ticks too large");
 #define TIMER_TIMEOUT_ms (150u)
-
 #define IR_CMD_BUFFER_ELEM_CNT (10u)
 static uint8_t buffer[IR_CMD_BUFFER_ELEM_CNT];
 static struct ring_buffer ir_cmd_buffer = { .buffer = buffer, .size = IR_CMD_BUFFER_ELEM_CNT };
@@ -66,24 +65,15 @@ static inline bool is_valid_pulse(uint16_t pulse, uint8_t ms)
         return ms == 0;
     } else if (pulse == 2) {
         return ms < 10;
-    } else if (pulse >= 3 && pulse <= 33) {
+    } else if (3 <= pulse && pulse <= 34) {
         return ms < 5;
-    } else if (pulse == 34) {
-        // if (ms < 50) {
-        //     led_init();
-        //     led_state_e led_state = LED_STATE_OFF;
-        //     while (1) {
-        //     led_state = (led_state == LED_STATE_OFF) ? LED_STATE_ON : LED_STATE_OFF;
-        //     led_set(LED_TEST, led_state);
-        //     BUSY_WAIT_ms(5000);// delay us
-        //     }
-        // }
-        return ms < 50;
     } else if (pulse == 35) {
+        return ms < 50;
+    } else if (pulse == 36) {
         return ms < 5;
-    } else if (pulse >= 36 && !IS_ODD(pulse)) {
+    } else if (pulse >= 37 && IS_ODD(pulse)) {
         return ms < 110;
-    } else if (pulse >= 36) { // Even
+    } else if (pulse >= 37) { // Even
         return ms < 5;
     } else {
         return false;
@@ -92,12 +82,12 @@ static inline bool is_valid_pulse(uint16_t pulse, uint8_t ms)
 
 static inline bool is_bit_pulse(uint16_t pulse)
 {
-    return 3 <= pulse && pulse <= 33;
+    return 3 <= pulse && pulse <= 34;
 }
 
 static inline bool is_message_pulse(uint16_t pulse)
 {
-    return pulse == 33 || (pulse > 36 && !IS_ODD(pulse));
+    return pulse == 33 || (pulse > 36 && IS_ODD(pulse));
 }
 
 static void isr_pulse(void)

@@ -4,7 +4,7 @@
 #include "drivers/uart.h"
 #include "external/printf/printf.h"
 #include <stdbool.h>
-
+#include "common/defines.h"
 static bool initialized = false;
 void trace_init(void)
 {
