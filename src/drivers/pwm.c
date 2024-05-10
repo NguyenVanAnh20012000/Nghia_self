@@ -128,7 +128,6 @@ void pwm_init(void)
     TA0CTL = TASSEL_2 + ID_3 + MC_0;
     // Set period
     TA0CCR0 = PWM_TA0CCR0;
-
+    // not using interrupt so not need to enable CCIE of TA0CCTLx register
     initialized = true;
-
 }
