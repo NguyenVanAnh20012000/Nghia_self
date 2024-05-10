@@ -5,10 +5,11 @@
 #include <msp430.h>
 #include <assert.h>
 #include <stdint.h>
+// #include "drivers/led.h"
 #define UART_BUFFER_SIZE (16)
 static uint8_t buffer[UART_BUFFER_SIZE];
 static struct ring_buffer tx_buffer = { .buffer = buffer, .size = sizeof(buffer) };
-#define SMCLK (16000000u)
+// #define SMCLK (16000000u)
 #define BRCLK (SMCLK)
 #define UART_BAUD_RATE (115200u)
 static_assert(UART_BAUD_RATE < (BRCLK / 3.0f),

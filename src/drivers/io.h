@@ -16,7 +16,7 @@ typedef enum {
     IO_UNUSED_1 = IO_13,
     IO_UNUSED_2 = IO_14,
     IO_UNUSED_3 = IO_15,
-    IO_UNUSED_4 = IO_16,
+    IO_PWM_MOTORS_LEFT = IO_16,
     IO_UNUSED_5 = IO_17,
     IO_IR_REMOTE = IO_20,
     IO_UNUSED_7 = IO_21,
@@ -83,9 +83,10 @@ typedef enum {
 #endif
 struct io_config {
     io_select_e select;
+    io_resistor_e resistor;
     io_dir_e direction;
     io_out_e output;
-    io_resistor_e resistor;
+    
 };
 typedef void (*isr_function)(void); // function pointer
 
