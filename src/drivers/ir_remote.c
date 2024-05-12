@@ -87,7 +87,7 @@ static inline bool is_bit_pulse(uint16_t pulse)
 
 static inline bool is_message_pulse(uint16_t pulse)
 {
-    return pulse == 33 || (pulse > 36 && IS_ODD(pulse));
+    return pulse == 34 || (pulse > 36 && IS_ODD(pulse));
 }
 
 static void isr_pulse(void)
@@ -137,7 +137,7 @@ ir_cmd_e ir_remote_get_cmd(void)
 
 void ir_remote_init(void)
 {
-    io_configure_interrupt(IO_IR_REMOTE, IO_TRIGGER_FALLING, isr_pulse);
+    io_configure_interrupt(IO_IR_REMOTE, IO_TRIGGER_RISING, isr_pulse);
     io_enable_interrupt(IO_IR_REMOTE);
     // timer_clear_flag();
     timer_init();

@@ -9,7 +9,9 @@
 #define CYCLES_PER_MS (CYCLES_16MHZ / 1000u)
 #define ms_TO_CYCLES(ms) (CYCLES_PER_MS * ms)
 #define BUSY_WAIT_ms(ms) (__delay_cycles(ms_TO_CYCLES(ms)))
-#define IS_ODD(x) (x & 1)
+#define MODULO_2(x) (x & 1)
+#define IS_ODD(x) MODULO_2(x)
+#define ABS(x) ((x) >= 0 ? (x) : -(x))
 #define MCLK CYCLES_16MHZ
 #define SMCLK MCLK
 #define TIMER_INPUT_DIVIDER_3 (8u)
