@@ -61,6 +61,7 @@ SOURCES_WITH_HEADERS = \
 				src/drivers/pwm.c \
 				src/drivers/tb6612fng.c \
 				src/drivers/adc.c \
+				src/drivers/mhseries.c \
 				src/app/drive.c \
 				src/app/enemy.c \
 				external/printf/printf.c 

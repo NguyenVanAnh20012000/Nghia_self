@@ -7,7 +7,7 @@
 static volatile adc_channel_values_t adc_dtc_block;
 static volatile adc_channel_values_t adc_dtc_block_cache;
 static const io_e *adc_pins;
-static uint8_t adc_pin_cnt ;
+static uint8_t adc_pin_cnt;
 static uint8_t dtc_channel_cnt;
 
 static inline void adc_enable_and_start_conversion(void)
