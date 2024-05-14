@@ -21,6 +21,7 @@ static void init_clocks()
      * MCLK: Master clock drives the CPU and some peripherals
      * SMCLK: Subsystem master clock drives some peripherals */
     // BCSCTL2 default
+    BCSCTL3 = LFXT1S_2;
 }
 
 static void watchdog_stop(void)

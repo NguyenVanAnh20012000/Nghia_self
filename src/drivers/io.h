@@ -1,6 +1,7 @@
 #ifndef IO_H
 #define IO_H
 #include <stdbool.h>
+#include <stdint.h>
 typedef enum {
     IO_10,IO_11,IO_12,IO_13,IO_14,IO_15,IO_16,IO_17,
     IO_20,IO_21,IO_22,IO_23,IO_24,IO_25,IO_26,IO_27,
@@ -13,7 +14,7 @@ typedef enum {
     IO_TEST_LED = IO_10,
     IO_UART_RXD = IO_11,
     IO_UART_TXD = IO_12,
-    IO_UNUSED_1 = IO_13,
+    IO_LINE_DETECT_FRONT_LEFT = IO_13,
     IO_UNUSED_2 = IO_14,
     IO_UNUSED_3 = IO_15,
     IO_PWM_MOTORS_LEFT = IO_16,
@@ -103,3 +104,5 @@ void io_configure_interrupt(io_e io,io_trigger_e trigger,isr_function isr);
 void io_deconfigure_interrupt(io_e io);
 void io_enable_interrupt(io_e io);
 void io_disable_interrupt(io_e io);
+const io_e *io_adc_pins(uint8_t *cnt);
+uint8_t io_to_adc_idx(io_e io);
