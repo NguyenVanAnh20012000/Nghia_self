@@ -16,6 +16,7 @@
 #include "common/assert_handler.h"
 #include "common/ring_buffer.h"
 #include "app/drive.h"
+#include "app/line.h"
 SUPPRESS_UNUSED
 static void test_setup(void)
 {
@@ -318,6 +319,18 @@ static void test_mhseries(void) {
         BUSY_WAIT_ms(1000);
     }
 }
+SUPPRESS_UNUSED
+static void test_line(void)
+{
+    test_setup();
+    trace_init();
+    line_init();
+    while (1) {
+        TRACE("Line %u", line_get());
+        BUSY_WAIT_ms(1000);
+    }
+}
+
 int main () {
     TEST();
     ASSERT(0);

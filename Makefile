@@ -1,4 +1,4 @@
-# TOOLS_PATH = /home/nghia/Downloads
+TOOLS_PATH = /home/nghia/Downloads
 # Check arguments
 ifeq ($(HW),LAUNCHPAD) # HW argument
 TARGET_HW=launchpad
@@ -26,8 +26,8 @@ MSPGCC_BIN_DIR = $(MSPGCC_ROOT_DIR)/bin
 MSPGCC_INCLUDE_DIR = $(MSPGCC_ROOT_DIR)/include
 BUILD_DIR = build
 OBJ_DIR = $(BUILD_DIR)/obj
-TI_CCS_DIR = $(TOOLS_DIR)/ti/ccs1260/ccs
-# TI_CCS_DIR = /home/nghia/ti/ccs1260/ccs
+# TI_CCS_DIR = $(TOOLS_DIR)/ti/ccs1260/ccs
+TI_CCS_DIR = /home/nghia/ti/ccs1260/ccs
 DEBUG_BIN_DIR = $(TI_CCS_DIR)/ccs_base/DebugServer/bin
 DEBUG_DRIVERS_DIR = $(TI_CCS_DIR)/ccs_base/DebugServer/drivers
 
@@ -64,6 +64,7 @@ SOURCES_WITH_HEADERS = \
 				src/drivers/mhseries.c \
 				src/app/drive.c \
 				src/app/enemy.c \
+				src/app/line.c \
 				external/printf/printf.c 
 ifndef TEST
 SOURCES = \
