@@ -10,6 +10,7 @@
 #include "drivers/pwm.h"
 #include "drivers/tb6612fng.h"
 #include "drivers/adc.h"
+#include "drivers/mhseries.h"
 #include "external/printf/printf.h"
 #include "common/trace.h"
 #include "common/assert_handler.h"
@@ -301,6 +302,19 @@ static void test_adc(void)
         for (uint8_t i = 0; i < ADC_CHANNEL_COUNT; i++) {
             TRACE("ADC ch %u: %u", i, values[i]);
         }
+        BUSY_WAIT_ms(1000);
+    }
+}
+SUPPRESS_UNUSED
+static void test_mhseries(void) {
+    test_setup();
+    trace_init();
+    mhseries_init();
+    struct mhseries_voltages voltages = {0,0,0,0};
+    while (1) {
+        mhseries_get_voltages(&voltages);
+        TRACE("Voltages fl %u fr %u bl %u br %u", voltages.front_left, voltages.front_right,
+                                                  voltages.back_left, voltages.back_right);
         BUSY_WAIT_ms(1000);
     }
 }
