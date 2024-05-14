@@ -9,6 +9,7 @@
 #include "drivers/ir_remote.h"
 #include "drivers/pwm.h"
 #include "drivers/tb6612fng.h"
+#include "drivers/adc.h"
 #include "external/printf/printf.h"
 #include "common/trace.h"
 #include "common/assert_handler.h"
@@ -278,6 +279,7 @@ static void test_drive(void)
         drive_set(dir, speed);
     }
 }
+SUPPRESS_UNUSED
 static void test_assert_motors(void)
 {
     test_setup();
@@ -286,6 +288,21 @@ static void test_assert_motors(void)
     BUSY_WAIT_ms(3000);
     ASSERT(0);
     while(0) { }
+}
+SUPPRESS_UNUSED
+static void test_adc(void)
+{
+    test_setup();
+    trace_init();
+    adc_init();
+    while (1) {
+        adc_channel_values_t values = {0};
+        adc_get_channel_values(values);
+        for (uint8_t i = 0; i < ADC_CHANNEL_COUNT; i++) {
+            TRACE("ADC ch %u: %u", i, values[i]);
+        }
+        BUSY_WAIT_ms(1000);
+    }
 }
 int main () {
     TEST();
